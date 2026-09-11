@@ -81,7 +81,6 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
 }
 
 
-
 resource "aws_s3_bucket_policy" "cloudtrail_s3_policy" {
   bucket = aws_s3_bucket.cloud_siem_lab_cloudtrail_bucket.id
   policy = data.aws_iam_policy_document.cloudtrail_s3_policy.json
@@ -95,6 +94,8 @@ data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
 
-
+resource "aws_guardduty_detector" "cloud_siem_lab_guardduty_detector" {
+  enable = true
+}
 
 
