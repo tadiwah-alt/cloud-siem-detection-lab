@@ -21,6 +21,39 @@ resource "aws_s3_bucket" "cloud_siem_lab_cloudtrail_bucket" {
 }
 
 
+resource "aws_s3_bucket_versioning" "cloud_siem_lab_cloudtrail_bucket_versioning" {
+  bucket = aws_s3_bucket.cloud_siem_lab_cloudtrail_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+
+resource "aws_s3_bucket_public_access_block" "cloud_siem_lab_cloudtrail_bucket_public_access_block" {
+  bucket = aws_s3_bucket.cloud_siem_lab_cloudtrail_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+
+
+resource "aws_s3_bucket_lifecycle_configuration" "cloud_siem_lab_cloudtrail_bucket_lifecycle" {
+  bucket = aws_s3_bucket.cloud_siem_lab_cloudtrail_bucket.id
+
+  rule {
+    id = "Allow deletion of trails"
+
+    expiration {
+      days = 30
+    }
+
+    status = "Enabled"
+  }
+}
+
 
 
 
@@ -31,7 +64,9 @@ resource "aws_cloudtrail" "cloud_siem_lab_trail" {
   name                          = "cloud-siem-lab-trail"
   s3_bucket_name                = aws_s3_bucket.cloud_siem_lab_cloudtrail_bucket.id
   s3_key_prefix                 = "prefix"
-  include_global_service_events = false
+  include_global_service_events = true
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
 }
 
 
