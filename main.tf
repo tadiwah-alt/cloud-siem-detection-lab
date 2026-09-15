@@ -132,5 +132,3 @@ data "aws_region" "current" {}
 resource "aws_guardduty_detector" "cloud_siem_lab_guardduty_detector" {
   enable = true
 }
-
-
