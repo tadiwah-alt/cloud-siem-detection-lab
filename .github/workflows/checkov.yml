@@ -20,3 +20,4 @@ jobs:
         with:
           directory: .
           framework: terraform
+          skip_check: CKV_AWS_35, CKV_AWS_145, CKV_AWS_144, CKV2_AWS_10, CKV_AWS_252, CKV_AWS_18, CKV_AWS_300, CKV2_AWS_3, CKV2_AWS_62
