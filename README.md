@@ -1,3 +1,6 @@
+![Checkov CI](https://github.com/tadiwah-alt/cloud-siem-detection-lab/actions/workflows/checkov.yml/badge.svg)
+
+
 # Cloud SIEM Detection Lab
 
 ## Project Overview
@@ -85,6 +88,13 @@ The remaining 9 findings were evaluated and deliberately not implemented, each f
 ## Debugging & Challenges
 
 While building the S3 bucket policy that grants CloudTrail write access, I hit a permission failure caused by an ARN mismatch. The IAM policy's `SourceArn` condition needs to reference the CloudTrail trail by its real, AWS-facing name — but because the trail didn't exist yet at the moment the policy was being created (CloudTrail requires the policy to exist *first*, since AWS validates write access as part of trail creation), Terraform couldn't auto-fetch that ARN as a live reference the way it could for the already-existing S3 bucket. Instead, the ARN had to be manually constructed as a string from account ID, region, and partition data sources — which meant it could silently drift out of sync with the trail's actual name if not updated carefully. I caught this by comparing `terraform plan` output line-by-line against my resource definitions, and fixed it by ensuring the hardcoded trail name in the policy exactly matched the real `name` argument on the `aws_cloudtrail` resource.
+
+
+### Continuous Integration
+
+Checkov runs automatically on every push to `main` via **GitHub Actions**, using the official `bridgecrewio/checkov-action`. The workflow is configured to fail the build only on genuinely new, unaddressed findings — the 9 checks documented above as consciously accepted risks are explicitly skipped via the `skip_check` input, so the pipeline's pass/fail status reflects real regressions rather than known, deliberate decisions. This turns the risk-acceptance table above from documentation into an enforced policy: if a future change accidentally undoes one of the hardening fixes, the pipeline will correctly fail and flag it.
+
+The workflow definition lives at `.github/workflows/checkov.yml`.
 
 ## Teardown Note
 
