@@ -1,5 +1,7 @@
 ---
 name: Checkov
+permissions:
+  contents: read
 on:
   push:
     branches:
