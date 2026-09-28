@@ -12,7 +12,7 @@ def lambda_handler(event, context):
         print(f"{iam_userName}'s key has been disabled")
 
     else:
-        print(f"Failed to disable {iam_userName}'s key")
+        print(f"Failed to disable {iam_userName}'s Iam Access Key")
 
 
 
