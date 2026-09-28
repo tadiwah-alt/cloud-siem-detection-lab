@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     iam_userName = event["detail"]["resource"]["accessKeyDetails"]["userName"]
 
     if iam_user_handler(iam_accessKeyId, iam_userName):
-        print(f"{iam_userName}'s key has been disabled")
+        print(f"{iam_userName}'s Iam Access Key has been disabled")
 
     else:
         print(f"Failed to disable {iam_userName}'s Iam Access Key")
