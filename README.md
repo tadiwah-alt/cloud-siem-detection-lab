@@ -72,18 +72,23 @@ Re-running Checkov after these changes confirmed all five findings resolved, wit
 
 ### Findings Consciously Accepted (Not Fixed)
 
-The remaining 9 findings were evaluated and deliberately not implemented, each for a specific reason rather than left unaddressed by oversight:
+The remaining 14 findings were evaluated and deliberately not implemented, each for a specific reason rather than left unaddressed by oversight:
 
 | Finding | Reasoning |
 |---|---|
-| `CKV_AWS_35`, `CKV_AWS_145` — KMS encryption | The bucket already uses default AES-256 encryption at rest. A KMS Customer Managed Key adds a small recurring cost (~$1/month) that isn't justified for a lab with no sensitive production data. |
-| `CKV_AWS_144` — Cross-region replication | A disaster-recovery feature intended for production systems; doubles storage cost with no benefit to a temporary lab. |
-| `CKV2_AWS_10` — CloudTrail/CloudWatch integration | Would enable real-time alerting at a small ongoing cost. Noted as a genuine future enhancement rather than dismissed. |
-| `CKV_AWS_252` — No SNS topic defined | Low priority with no current consumer to notify; would add an unused resource. |
-| `CKV_AWS_18` — S3 access logging | Requires a second, separate bucket to receive access logs — disproportionate infrastructure for this lab's scope. |
-| `CKV_AWS_300` — No multipart upload abort rule | Not applicable: CloudTrail writes small, single-request log files, so multipart uploads never occur in this bucket's actual usage pattern. |
-| `CKV2_AWS_3` — GuardDuty org/region check | A structural false positive — this check targets multi-account AWS Organizations setups; this project uses a single personal account. |
-| `CKV2_AWS_62` — S3 event notifications | This is an automation feature (triggering Lambda/SNS on upload), not a security gap by itself. |
+| `CKV_AWS_35`, `CKV_AWS_145` - KMS encryption | The bucket already uses default AES-256 encryption at rest. A KMS Customer Managed Key adds a small recurring cost (~$1/month) that isn't justified for a lab with no sensitive production data. |
+| `CKV_AWS_144` - Cross-region replication | A disaster-recovery feature intended for production systems; doubles storage cost with no benefit to a temporary lab. |
+| `CKV2_AWS_10` - CloudTrail/CloudWatch integration | Would enable real-time alerting at a small ongoing cost. Noted as a genuine future enhancement rather than dismissed. |
+| `CKV_AWS_252` - No SNS topic defined | Low priority with no current consumer to notify; would add an unused resource. |
+| `CKV_AWS_18` - S3 access logging | Requires a second, separate bucket to receive access logs — disproportionate infrastructure for this lab's scope. |
+| `CKV_AWS_300` - No multipart upload abort rule | Not applicable: CloudTrail writes small, single-request log files, so multipart uploads never occur in this bucket's actual usage pattern. |
+| `CKV2_AWS_3` - GuardDuty org/region check | A structural false positive - this check targets multi-account AWS Organizations setups; this project uses a single personal account. |
+| `CKV2_AWS_62` - S3 event notifications | This is an automation feature (triggering Lambda/SNS on upload), not a security gap by itself. |
+| `CKV_AWS_111` - Write action with no constraints | The function has to disable a key for whichever user is compromised, so you can't name the user in advance. |
+| `CKV_AWS_116` - Concurrency cap | The function fires only on one rare, specific finding type. |
+| `CKV_AWS_117`- Lambda inside a VPC | Reaching the IAM API from inside a VPC generally means a NAT gateway, which bills hourly and is unnecessary for a project like this. |
+| `CKV_AWS_272` - Code signing | It needs extra signing infrastructure that isn't worth it for one lab function. |
+| `CKV_AWS_50` - X-Ray tracing | It needs extra IAM permissions, and a function that runs a handful of times gets little from tracing. |
 
 ## Debugging & Challenges
 
