@@ -87,7 +87,7 @@ The result (before remediation):
 
 
 Confirmed independently via `aws iam list-access-keys` — the key's status changed from `Active` to `Inactive`, proving the actual AWS-side remediation, not just a log message claiming success.
-The result(after remediation)
+The result (after remediation):
 
 ![After lambda remediation](screenshots/after-actual-remediation.png)
 
