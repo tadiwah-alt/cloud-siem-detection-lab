@@ -80,12 +80,14 @@ aws guardduty create-sample-findings --detector-id <id> \
 This confirmed GuardDuty → EventBridge → Lambda invocation worked end-to-end. Since the sample finding names a fictional user (`GeneratedFindingUserName`), the function correctly caught the resulting `NoSuchEntity` error from IAM and logged the failure — proving both the invocation path and the error-handling path work as designed.
 
 **Test B — actual remediation, via a real throwaway IAM user:**
-A disposable IAM user and access key were created via the CLI, and the function was manually invoked with a test event matching the real finding's JSON shape. The result:
+A disposable IAM user and access key were created via the CLI, and the function was manually invoked with a test event matching the real finding's JSON shape
+The result (before remediation):
 
 ![Before lambda remediation](screenshots/before-actual-remediation.png)
 
 
 Confirmed independently via `aws iam list-access-keys` — the key's status changed from `Active` to `Inactive`, proving the actual AWS-side remediation, not just a log message claiming success.
+The result(after remediation)
 
 ![After lambda remediation](screenshots/after-actual-remediation.png)
 
