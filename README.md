@@ -82,7 +82,12 @@ This confirmed GuardDuty → EventBridge → Lambda invocation worked end-to-end
 **Test B — actual remediation, via a real throwaway IAM user:**
 A disposable IAM user and access key were created via the CLI, and the function was manually invoked with a test event matching the real finding's JSON shape. The result:
 
+![Before lambda remediation](screenshots/before-actual-remediation.png)
+
+
 Confirmed independently via `aws iam list-access-keys` — the key's status changed from `Active` to `Inactive`, proving the actual AWS-side remediation, not just a log message claiming success.
+
+![After lambda remediation](screenshots/after-actual-remediation.png)
 
 ### Known limitations (documented, not fixed)
 
